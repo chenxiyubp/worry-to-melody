@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1a1a24">
+  <meta name="description" content="给烦恼换一条音轨。把今天的心事，变成一段慢慢平静的旋律。">
+  <meta property="og:title" content="烦恼变音乐 · 给心事换一条音轨">
+  <meta property="og:description" content="一句心事，16 小节，30 多秒。用钢琴与弦乐，走过紧张、转折与平静。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://chenxiyubp.github.io/worry-to-melody/">
+  <meta property="og:image" content="https://chenxiyubp.github.io/worry-to-melody/docs/preview.png">
+  <title>烦恼变音乐 · 给心事换一条音轨</title>
+  <link rel="stylesheet" href="style.css">
+  <script async id="tone-loader" src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.js"></script>
+  <script defer src="emotion.js"></script>
+  <script defer src="music.js"></script>
+  <script defer src="share.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div class="site-shell">
+    <header class="topbar"><a class="brand" href="#"><span class="brand-icon" aria-hidden="true">♫</span> 烦恼变音乐<span class="brand-en">WORRY TO MELODY</span></a><span class="edition"><span class="status-dot"></span> 无用之用 · VOL. 01</span></header>
+    <main>
+      <section class="hero" aria-labelledby="main-title">
+        <div class="eyebrow"><span class="tiny-star">✦</span> A LITTLE USELESS. A LITTLE HEALING.</div>
+        <h1 id="main-title">给烦恼，<br class="mobile-break">换一条<span class="highlight">音轨<span class="underline-pixels"></span></span><span class="title-note" aria-hidden="true">♫</span></h1>
+        <p>有些事暂时解决不了。那就先把它，听成一首歌。</p>
+        <div class="hero-sticker" aria-hidden="true"><span>100%</span><small>心事回收率</small><i>✧</i></div>
+      </section>
+
+      <div class="workspace">
+        <section class="panel input-panel" aria-labelledby="input-title">
+          <div class="panel-heading"><h2 id="input-title"><span class="step">01</span> 把心事放进来</h2><span class="micro-label">INPUT</span></div>
+          <form id="worry-form">
+            <label class="field-label" for="worry">今天，是什么让你皱了皱眉？</label>
+            <div class="textarea-wrap"><textarea id="worry" maxlength="280" rows="4" placeholder="明天就要答辩了，PPT 还没做完，真的好紧张……" aria-describedby="text-tip char-count"></textarea><span id="char-count" class="char-count">0 / 280</span></div>
+            <div class="examples"><span id="text-tip">没想好？试试</span><button type="button" data-example="明天就要答辩了，PPT 还没做完，真的好紧张！">答辩倒计时</button><button type="button" data-example="又加班到深夜，真的好累，想放空一会儿。">电量只剩 1%</button><button type="button" data-example="有点孤独，想念一个再也不会见面的人。">有点想念</button></div>
+            <fieldset class="emotion-field"><legend>此刻的心情 <span>也可以自己选</span></legend><div class="emotion-options">
+              <label><input type="radio" name="emotion" value="auto" checked><span><b>✧</b> 自动</span></label>
+              <label><input type="radio" name="emotion" value="anxious"><span><b>〰</b> 焦虑</span></label>
+              <label><input type="radio" name="emotion" value="sad"><span><b>☂</b> 难过</span></label>
+              <label><input type="radio" name="emotion" value="angry"><span><b>ϟ</b> 愤怒</span></label>
+              <label><input type="radio" name="emotion" value="tired"><span><b>☾</b> 疲惫</span></label>
+              <label><input type="radio" name="emotion" value="calm"><span><b>≈</b> 平静</span></label>
+            </div></fieldset>
+            <button class="primary-button" id="generate" type="submit"><span>✦</span> 变成音乐 <span class="button-arrow">↗</span></button>
+            <p class="privacy-note"><span aria-hidden="true">▣</span> 默认只在此刻、此地处理。你的心事不会被保存。</p>
+            <details class="advanced"><summary>高级设置 <span>可选 AI 情绪识别</span></summary><div class="advanced-body">
+              <label class="switch-label"><input type="checkbox" id="use-ai"> 使用自定义 AI 接口识别情绪</label>
+              <p>开启后，文字将发送到你填写的服务；密钥仅留在当前页面内存中，刷新即清除。音符始终由本地规则生成。</p>
+              <label for="api-url">API 地址</label><input id="api-url" type="url" placeholder="https://your-api.example/v1" autocomplete="off">
+              <label for="api-key">API Key</label><input id="api-key" type="password" placeholder="仅在本次使用中保留" autocomplete="off">
+              <label for="api-model">模型名称</label><input id="api-model" type="text" placeholder="填写服务支持的模型名称" autocomplete="off">
+              <p>支持 OpenAI 兼容的 /chat/completions 接口；服务需允许浏览器跨域请求。</p>
+            </div></details>
+          </form>
+        </section>
+
+        <section class="panel player-panel" aria-labelledby="player-title">
+          <div class="panel-heading"><h2 id="player-title"><span class="step">02</span> 让情绪慢慢松开</h2><span class="micro-label" id="player-state">STANDBY</span></div>
+          <div class="cassette" id="cassette" aria-hidden="true">
+            <div class="cassette-top"><span>SIDE A</span><span>WORRY TAPES™</span><span>16</span></div>
+            <div class="cassette-label"><span class="tape-caption" id="tape-caption">把今天，轻轻倒带。</span><div class="cassette-window"><div class="reel"><i></i></div><div class="tape-lines"><span></span><span></span><span></span></div><div class="reel"><i></i></div></div><div class="tape-bottom"><span>FROM NOISE</span><span>→</span><span>TO PEACE</span></div></div>
+            <div class="cassette-base"><i></i><span></span><i></i></div><b class="screw s1">+</b><b class="screw s2">+</b><b class="screw s3">+</b><b class="screw s4">+</b>
+          </div>
+          <div class="track-heading"><div><p class="micro-label" id="track-kicker">YOUR FEELINGS, REMIXED.</p><h3 id="track-title">下一首，关于你的心事</h3></div><span class="emotion-badge" id="emotion-badge">待录入</span></div>
+          <p class="track-description" id="track-description">16 小节，从一团乱麻，到一口深呼吸。</p>
+          <div class="sound-controls"><label for="sound-mode">音色对比</label><select id="sound-mode"><option value="sample">乐器采样版</option><option value="legacy">原合成器版</option></select></div>
+          <p class="track-description" id="sound-status" role="status" aria-live="polite">默认钢琴与弦乐采样，首次播放需要联网。</p>
+          <progress id="sample-progress" max="100" value="0" aria-label="乐器采样加载进度" hidden></progress>
+          <canvas id="waveform" height="58" aria-label="旋律可视化"></canvas>
+          <div class="journey" aria-label="音乐的三个阶段"><span id="phase-0"><i></i> 有点打结 <small>01—06</small></span><span id="phase-1"><i></i> 慢慢松开 <small>07—12</small></span><span id="phase-2"><i></i> 轻轻落地 <small>13—16</small></span></div>
+          <div class="progress-track" role="progressbar" aria-label="播放进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress"><span id="progress-fill"></span></div>
+          <div class="player-controls"><span class="time" id="time">00:00 / 00:00</span><div class="transport"><button type="button" id="play" class="play-button" disabled aria-label="播放旋律">▶</button><button type="button" id="stop" class="stop-button" disabled aria-label="停止播放">■</button></div><label class="volume-label"><span aria-hidden="true">♪</span><input id="volume" type="range" min="0" max="100" value="65" aria-label="音量"></label></div>
+          <p class="listen-tip">戴上耳机，给自己一首歌的时间。</p>
+        </section>
+      </div>
+
+      <section class="share-panel" aria-labelledby="share-title"><div class="share-intro"><span class="step">03</span><div><h2 id="share-title">留一张，心情的 B 面</h2><p>烦恼可以很重，分享可以很轻。</p></div></div><div class="share-actions"><label class="hide-text"><input type="checkbox" id="hide-text"> 隐藏烦恼原文</label><button id="share-preview" type="button" class="secondary-button" disabled>▧ &nbsp; 生成分享卡片 <span>↗</span></button></div></section>
+      <p class="message" id="message" role="status" aria-live="polite">不必组织好语言，随便说说就好。</p>
+      <section class="footnote"><span class="pixel-flower" aria-hidden="true">✳</span><p>这玩意儿也许没用。<br><strong>但让你轻松一点，就很有用。</strong></p><span class="micro-label">USELESS, BUT USEFUL.</span></section>
+    </main>
+    <footer><span>烦恼变音乐 <i>©</i> 2026 · <a href="https://github.com/chenxiyubp/worry-to-melody" target="_blank" rel="noopener noreferrer">GitHub</a> · <a href="https://github.com/chenxiyubp/worry-to-melody/blob/main/ATTRIBUTION.md" target="_blank" rel="noopener noreferrer">音色鸣谢</a></span><span>用 16 小节，接住今天的你 <b>✦</b></span></footer>
+  </div>
+  <dialog id="share-dialog" aria-labelledby="dialog-title"><div class="dialog-top"><h2 id="dialog-title">你的心情，有了 B 面</h2><button id="close-dialog" aria-label="关闭分享卡片">×</button></div><canvas id="share-canvas" width="1080" height="1350" aria-label="可保存的心情分享卡片"></canvas><div class="dialog-actions"><button id="download-card" class="primary-button">↓ 保存图片</button><button id="native-share" class="secondary-button">分享</button></div><p id="share-message" role="status" aria-live="polite">图片包含当前选定的文字；勾选「隐藏烦恼原文」可保护心事。</p></dialog>
+</body>
+</html>
